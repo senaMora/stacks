@@ -1,0 +1,99 @@
+#include <iostream>
+//#include <stack>
+#include <chrono>
+using namespace std;
+using namespace chrono;
+
+class Node {
+public:
+    int data;
+    Node *next;
+};
+
+class Stack {
+private:
+    Node *top;
+
+public:
+    Stack() {
+        top = nullptr;
+    }
+
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    friend void push(Stack& s, int value);  // Declare push function as friend
+    friend void pop(Stack& s);              // Declare pop function as friend
+
+    void display() {
+        Node *temp = top;
+        while (temp != nullptr) {
+            cout << temp->data << " ";
+            temp = temp->next;
+        }
+        cout << endl;
+    }
+
+
+};
+
+void push(Stack& s, int value) {
+    Node *newNode = new Node();
+    newNode->data = value;
+    newNode->next = s.top;
+    s.top = newNode;
+}
+
+void pop(Stack& s) {
+    if (s.isEmpty()) {
+        cout << "Stack underflow" << endl;
+    } else {
+        Node *temp = s.top;
+        s.top = s.top->next;
+        int data = temp->data;
+        delete temp;
+        cout << data << endl;
+    }
+}
+
+int main() {
+
+    auto start = high_resolution_clock::now();
+
+    Stack s;
+    push(s, 8);
+    push(s, 10);
+    push(s, 5);
+    push(s, 11);
+    push(s, 15);
+    push(s, 23);
+    push(s, 6);
+    push(s, 18);
+    push(s, 20);
+    push(s, 17);
+
+    s.display();
+
+    pop(s);
+    pop(s);
+    pop(s);
+    pop(s);
+    pop(s);
+
+    s.display();
+
+    push(s, 4);
+    push(s, 30);
+    push(s, 3);
+    push(s, 1);
+
+    s.display();
+
+
+    auto end = high_resolution_clock::now();
+
+    auto duration = duration_cast<microseconds>(end - start);
+    cout << "Time taken: " << duration.count() << " microseconds" << endl;
+    return 0;
+}
